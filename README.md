@@ -68,3 +68,37 @@ Funciones:
     Balanceo de carga: Distribuye el tráfico entre los contenedores.
     Autoescalado: Ajusta automáticamente el número de contenedores en función de la demanda.
     Rollouts y rollbacks: Facilita la actualización y la reversión de aplicaciones.
+
+
+    POSTGRES SQL
+    1.- Generar script para poblar todas las tablas.
+        "pg_dump -h localhost -p 5432 -U usuario -s almacenes > estructura.sql"
+    
+    2.- Mostrar el número de ventas de cada producto, ordenado de más a menos ventas.
+        "SELECT COUNT(Producto) as NoVentas FROM Venta Group By Producto Order By Desc"
+
+    3.- Obtener un informe completo de ventas, indicando el nombre del cajero que realizo la venta, nombre y precios de los productos vendidos, y el piso en el que se encuentra la máquina registradora donde se realizó la venta.
+        "SELECT c.NomApels as NombreCajero, p.Nombre as Prod, p.precio as Precio, m.Piso as PisoMaquina From Venta as v
+        JOIN  PRODUCTOS as p on v.Producto = p.Codigo
+        JOIN  CAJEROS as c on v.Cajero = p.Codigo
+        JOIN  MAQUINAS_REGISTRADORAS as m on v.Maquina = p.Codigo"
+    
+    4.-Obtener las ventas totales realizadas en cada piso.
+        "SELECT COUNT(v.Maquina) as ventas, m.piso FROM VENTA as v
+        JOIN  MAQUINAS_REGISTRADORAS as m on v.Maquina = p.Codigo
+        GROUP BY m.piso"
+    
+    5.- Obtener el código y nombre de cada cajero junto con el importe total de sus ventas.
+        "SELECT COUNT(v.cajero) as ventas, c.NomApels as Cajero, SUM(p.precio), as Monto  FROM VENTA as v
+        JOIN  PRODUCTOS as p on v.Producto = p.Codigo
+        JOIN  CAJEROS as c on v.Cajero = p.Codigo
+        GROUP BY c.NomApels"
+
+    6.- Obtener el código y nombre de cada cajero junto con el importe total de sus ventas.
+        "SELECT COUNT(v.cajero) as ventas, c.NomApels as Cajero, SUM(p.precio) as Monto  FROM VENTA as v
+        JOIN  PRODUCTOS as p on v.Producto = p.Codigo
+        JOIN  CAJEROS as c on v.Cajero = c.Codigo
+        GROUP BY c.NomApels
+        HAVING Monto <= 5000"
+        
+    
